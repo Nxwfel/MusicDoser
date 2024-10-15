@@ -6,9 +6,9 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+@app.route('/authen')
+def authen():
+    return render_template('authen.html')
 
 @app.route('/tracks/<int:track_id>')
 def get_track(track_id):
