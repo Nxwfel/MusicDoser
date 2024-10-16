@@ -1,0 +1,40 @@
+{% extends "authen.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block form %}
+<header>
+    <span style="color: #a2d4cd ">Hello there!</span>
+    <h1 style="color: #00135c;">Welcome Back</h1>
+</header>
+<form action="{{ url_for('login') }}" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="input-group">
+        <label class="label">Email address</label>
+        {{ form.email(class_="input", autocomplete="off") }}
+        <div></div>
+    </div>
+    <div class="input-group">
+        <label class="label">Password</label>
+        {{ form.password(class_="input", autocomplete="off") }}
+        <div></div>
+    </div>
+    
+    <!-- reCAPTCHA Field -->
+    {{ form.recaptcha() }}
+    
+    <div class="container">
+        <button type="submit" class="button type--C">
+        <div class="button__line"></div>
+        <div class="button__line"></div>
+        <span class="button__text">Login</span>
+        <div class="button__drow1"></div>
+        <div class="button__drow2"></div>
+        </button>
+    </div>  
+
+</form>
+
+<div class="signup"><p>Don't have an account</p><a href="{{ url_for('register')}}">Sign up for free!</a></div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+/* Toast notification styling */
+.toast {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #42952b;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: -100px; /* Position above the screen */
+    font-size: 17px;
+    transition: top 0.1s, visibility 0.1s;
+}
+
+/* Success Toast */
+.toast.success {
+    background-color: #4CAF50;
+}
+
+/* Error Toast */
+.toast.error {
+    background-color: #f44336;
+}
+
+/* Show the toast (slide down) */
+.toast.show {
+    visibility: visible; /* Show the toast */
+    top: 20px; /* Slide down to 20px from the top */
+}

@@ -1,0 +1,22 @@
+{% extends "authen.html" %}
+
+{% block title %}Logout{% endblock %}
+
+{% block form %}
+<header>
+    <span style="color: #a2d4cd ">Hello there!</span>
+    <h1 style="color: #00135c;">Are you sure you want to log out?</h1>
+</header>
+<form action="{{ url_for('logout') }}" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="container">
+        <button type="submit" class="button type--C">
+            <div class="button__line"></div>
+            <div class="button__line"></div>
+            <span class="button__text">Logout</span>
+            <div class="button__drow1"></div>
+            <div class="button__drow2"></div>
+        </button>
+    </div>  
+</form>
+{% endblock %}
