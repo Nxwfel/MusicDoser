@@ -1,9 +1,19 @@
 from flask import render_template,request,flash,redirect,url_for
 from flask_login import login_user,logout_user,login_required,current_user
+from flask_admin import AdminIndexView
+
+
 from models import User
 from forms import RegistrationForm,LoginForm,LogoutForm
 
-def register_routes(app,db,bcrypt):
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect('/')
+
+def register_routes(app,db,bcrypt,limiter):    
     @app.route('/')
     def index():
         return render_template('index.html')
@@ -43,6 +53,7 @@ def register_routes(app,db,bcrypt):
         
         
     @app.route('/login', methods=['GET', 'POST'])
+    @limiter.limit("10 per minute")
     def login():
         # Check if its logged in
         if current_user.is_authenticated:

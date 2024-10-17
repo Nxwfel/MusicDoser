@@ -4,6 +4,10 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from dotenv import load_dotenv
 import os
@@ -14,6 +18,7 @@ migrate = Migrate()
 login_manager = LoginManager() 
 bcrypt = Bcrypt() 
 csrf = CSRFProtect()
+limiter = Limiter(get_remote_address,default_limits=["200 per day", "50 per hour"])
 
 def create_app():
     app = Flask(__name__)
@@ -34,7 +39,8 @@ def create_app():
     login_manager.init_app(app)
     csrf.init_app(app)
     bcrypt.init_app(app)
-
+    limiter.init_app(app)
+    
     # Set up the login view
     login_manager.login_view = 'login'  # Redirect to the login page if not logged in
 
@@ -44,8 +50,16 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # Create Flask-Admin instance    
+    from routes import MyAdminIndexView
+    admin = Admin(app, name='Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
+    
+    # Add views for each model
+    from models import User
+    admin.add_view(ModelView(User, db.session))
+    
     # Import routes
     from routes import register_routes
-    register_routes(app, db, bcrypt)
+    register_routes(app, db, bcrypt,limiter)
 
     return app
