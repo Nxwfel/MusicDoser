@@ -1,7 +1,9 @@
-from flask import render_template,request,flash,redirect,url_for
+from flask import render_template,request,flash,redirect,url_for,jsonify
 from flask_login import login_user,logout_user,login_required,current_user
 from flask_admin import AdminIndexView
 
+from pygame import mixer
+import os
 
 from models import User
 from forms import RegistrationForm,LoginForm,LogoutForm
@@ -14,6 +16,8 @@ class MyAdminIndexView(AdminIndexView):
         return redirect('/')
 
 def register_routes(app,db,bcrypt,limiter):    
+    mixer.init()
+
     @app.route('/')
     def index():
         return render_template('index.html')
@@ -100,3 +104,17 @@ def register_routes(app,db,bcrypt,limiter):
     def get_track(track_id):
         return render_template(f'track_{track_id}.html')
 
+    
+    @app.route('/play/<track_name>')
+    def play_track(track_name):
+        track_path = os.path.join('static', 'tracks', track_name)
+        if os.path.exists(track_path):
+            mixer.music.load(track_path)
+            mixer.music.play()
+            return jsonify({'status': 'playing', 'track': track_name}), 200
+        return jsonify({'status': 'error', 'message': 'Track not found'}), 404
+
+    @app.route('/stop')
+    def stop_track():
+        mixer.music.stop()
+        return jsonify({'status': 'stopped'}), 200

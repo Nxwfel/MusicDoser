@@ -86,12 +86,77 @@
         <div class="Track-wrapper">
             <h1 style="margin-top: 50px;margin-left: -25px;">TRACK LIST</h1>
             <ol type="1">
-                {% with titles = ["LEVEL DAYS","WITHOUT YOUR LOVE","RANSOM","DANCING WITH THE DEVIL","CHIRA GHABRET","TWLILEK ROH"] %}
+                {% with titles = ["LEVEL DAYS", "WITHOUT YOUR LOVE", "RANSOM", "DANCING WITH THE DEVIL", "CHIRA GHABRET", "TWLILEK ROH"] %} 
                     {% for title in titles %}
-                    <li><div class="Track"><img src= "{{ url_for('static', filename='img/play.png') }}" class="icon track-style"><div class="track-Artist">{{ title }} <br> Conro</div><img src= "{{ url_for('static', filename='img/share.png') }}" class="icon share2"></div></li>
+                        <li>
+                            <div class="Track">
+                                <img src="{{ url_for('static', filename='img/play.png') }}" class="icon track-style"  data-track="{{ title|replace(' ', '')|upper }}.mp3" onclick="toggleTrack(this)">
+                                <div class="track-Artist">{{ title }} <br> Conro</div>
+                                <img src="{{ url_for('static', filename='img/share.png') }}" class="icon share2">
+                            </div>
+                        </li>
                     {% endfor %}
                 {% endwith %}
             </ol>
+            <script>
+                let currentlyPlayingTrack = null;
+
+                function toggleTrack(element) {
+                    const trackFile = element.getAttribute('data-track');
+                    const playIcon = "{{ url_for('static', filename='img/play.png') }}";
+                    const pauseIcon = "{{ url_for('static', filename='img/pause.png') }}";
+
+                    if (currentlyPlayingTrack === trackFile) {
+                        // Stop track if it's clicked again
+                        stopTrack();
+                        element.src = playIcon; // Change to play icon
+                        currentlyPlayingTrack = null;
+                    } else {
+                        // Stop the currently playing track first, if any
+                        if (currentlyPlayingTrack) {
+                            stopTrack();
+                        }
+
+                        // Play the new track
+                        fetch(`/play/${trackFile}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Track not found');
+                                }
+                                currentlyPlayingTrack = trackFile;
+                                element.src = pauseIcon; // Change to pause icon
+                                return response.json();
+                            })
+                            .then(data => console.log(data))
+                            .catch(error => console.error('Error:', error));
+                    }
+                }
+
+                function stopTrack() {
+                    if (!currentlyPlayingTrack) return;
+
+                    fetch('/stop')
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            const playingElement = document.querySelector(`[data-track="${currentlyPlayingTrack}"]`);
+                            if (playingElement) {
+                                playingElement.src = "{{ url_for('static', filename='img/play.png') }}"; // Change to play icon
+                            }
+                            currentlyPlayingTrack = null; // Reset track
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+
+                // Add event listener to stop the track when the page is refreshed or navigated away
+                window.onbeforeunload = function() {
+                    if (currentlyPlayingTrack) {
+                        stopTrack();
+                    }
+                };
+
+
+            </script>
         </div>
     </section>
     <section id="Page3">
