@@ -50,23 +50,31 @@
             </div>
         </div>
 
-         <div class="menu">
-                <div class="menu-header"><img src= "{{ url_for('static', filename='img/soundcloud-logotype.png') }}" ><h3 id="header-logo">MusicDoser</h3><div class="close-btn"><img src= "{{ url_for('static', filename='img/close.png') }}" style="height: 20px;width: 20px;"></div></div>
-                <ul>
-                    <li><div class="Dropdown">Music <img src= "{{ url_for('static', filename='img/right-arrow.png') }}" class="right-arrow"><div class="Dropdownmenu"><ul><li>Dropdown1</li><li>Dropdown2</li><li>Dropdown3</li></ul></div></div></li>
-                    <li>Artist</li>
-                    <li>About</li>
-                    <li><div class="Dropdown">News <img src= "{{ url_for('static', filename='img/right-arrow.png') }}" class="right-arrow"><div class="Dropdownmenu"><ul><li>Dropdown1</li><li>Dropdown2</li><li>Dropdown3</li></ul></div></div></li>
-                    <li>Events</li>
-                    <li>Programming</li>
-                    <li>Gold</li>
-                    <li>Partners</li>
-                    <li>Press</li>
-                    <li>Players</li>
-                    <li>Shop</li>
-                    <li>Organization Infos</li>
-                </ul>
-            </div>
+        <div class="menu">
+            <div class="menu-header"><img src="{{ url_for('static',filename='/img/sound.png') }}"><h3 id="header-logo">MusicDoser</h3><div class="close-btn"><img src="{{ url_for('static',filename='/img/close.png') }}" style="height: 20px;width: 20px;"></div></div>
+            <ul>
+                <a href="{{ url_for('register') }}" style="text-decoration: none;"><li>Register</li></a>
+                <a href="{{ url_for('login') }}" style="text-decoration: none;"><li>Login</li></a>
+                <a href="{{ url_for('logout') }}" style="text-decoration: none;"><li>Logout</li></a>
+                <li><div class="Dropdown">Music <img src="static/img/right-arrow.png" class="right-arrow"><div class="Dropdownmenu"><ul><li>Dropdown1</li><li>Dropdown2</li><li>Dropdown3</li></ul></div></div></li>
+                <li>Artist</li>
+                <li>About</li>
+                <li></li>
+                <a href="/admin" target="_blank" style="text-decoration: none;"><li style="color:black;">Admin Panel</li></a>
+                <!-- not util
+                <li><div class="Dropdown">News <img src="static/img/right-arrow.png" class="right-arrow"><div class="Dropdownmenu"><ul><li>Dropdown1</li><li>Dropdown2</li><li>Dropdown3</li></ul></div></div></li>
+                <li>Events</li>
+                <li>Programming</li>
+                <li>Gold</li>
+                <li>Partners</li>
+                <li>Press</li>
+                <li>Players</li>
+                <li>Shop</li>
+                <li>Organization Infos</li>
+                -->
+            </ul>
+        </div>
+        
         <div class="socials">
             <img src= "{{ url_for('static', filename='img/instagram.png') }}" class="icon instagram">
             <img src= "{{ url_for('static', filename='img/twitch.png') }}" class="icon twitch">

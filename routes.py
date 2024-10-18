@@ -11,6 +11,7 @@ class MyAdminIndexView(AdminIndexView):
         return current_user.is_authenticated and current_user.is_admin
 
     def inaccessible_callback(self, name, **kwargs):
+        flash(message='Hmmmmm', category='error')
         return redirect('/')
 
 def register_routes(app,db,bcrypt,limiter):
