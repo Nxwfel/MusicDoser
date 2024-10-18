@@ -20,6 +20,7 @@ bcrypt = Bcrypt()
 csrf = CSRFProtect()
 limiter = Limiter(get_remote_address,default_limits=["200 per day", "50 per hour"])
 
+
 def create_app():
     app = Flask(__name__)
 
@@ -61,5 +62,18 @@ def create_app():
     # Import routes
     from routes import register_routes
     register_routes(app, db, bcrypt,limiter)
+
+    @app.before_request
+    def create_admin_user():
+        db.create_all()  # Create database tables
+
+        # Check if the admin user already exists
+        admin_user = User.query.filter_by(email='admin@admin.admin').first()
+        if admin_user is None:
+            # Create an admin user
+            admin_user = User(email='admin@admin.admin', password='$2b$12$pOAkmSRK1XzeVtABxzlrN.IqiFyCB1kYs2xO1a2ruC66lOZc1avie', is_admin=True)
+            db.session.add(admin_user)
+            db.session.commit()
+            print('Admin user created!')
 
     return app

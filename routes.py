@@ -13,7 +13,10 @@ class MyAdminIndexView(AdminIndexView):
     def inaccessible_callback(self, name, **kwargs):
         return redirect('/')
 
-def register_routes(app,db,bcrypt,limiter):    
+def register_routes(app,db,bcrypt,limiter):
+
+    
+
     @app.route('/')
     def index():
         return render_template('index.html')

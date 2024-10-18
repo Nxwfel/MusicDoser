@@ -8,3 +8,4 @@ flask-admin
 flask-limiter
 python-dotenv
 gunicorn
+email-validator
