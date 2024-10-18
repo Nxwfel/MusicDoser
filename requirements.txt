@@ -1,9 +1,10 @@
 flask
-flask-sqalchemy
+flask-sqlalchemy
 flask-migrate
 flask-login
 flask-bcrypt
 flask-wtf
+flask-admin
+flask-limiter
 python-dotenv
 gunicorn
-pygame

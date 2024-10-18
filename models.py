@@ -1,6 +1,5 @@
 from app import db
 from flask_login import UserMixin
-import pyotp
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

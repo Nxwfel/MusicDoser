@@ -90,7 +90,7 @@
                     {% for title in titles %}
                         <li>
                             <div class="Track">
-                                <img src="{{ url_for('static', filename='img/play.png') }}" class="icon track-style"  data-track="{{ title|replace(' ', '')|upper }}.mp3" onclick="toggleTrack(this)">
+                                <img src="{{ url_for('static', filename='img/play.png') }}" class="icon track-style" data-track="{{ title|replace(' ', '')|upper }}.mp3" onclick="toggleTrack(this)">
                                 <div class="track-Artist">{{ title }} <br> Conro</div>
                                 <img src="{{ url_for('static', filename='img/share.png') }}" class="icon share2">
                             </div>
@@ -98,66 +98,49 @@
                     {% endfor %}
                 {% endwith %}
             </ol>
+            <audio id="audio-player" style="display:none;" controls>
+                <source id="audio-source" src="" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
             <script>
                 let currentlyPlayingTrack = null;
-
+        
                 function toggleTrack(element) {
                     const trackFile = element.getAttribute('data-track');
                     const playIcon = "{{ url_for('static', filename='img/play.png') }}";
                     const pauseIcon = "{{ url_for('static', filename='img/pause.png') }}";
-
+                
+                    const audioPlayer = document.getElementById('audio-player');
+                    const audioSource = document.getElementById('audio-source');
+                
                     if (currentlyPlayingTrack === trackFile) {
                         // Stop track if it's clicked again
-                        stopTrack();
-                        element.src = playIcon; // Change to play icon
+                        audioPlayer.pause();
+                        audioSource.src = ""; // Reset source
                         currentlyPlayingTrack = null;
+                        element.src = playIcon; // Change to play icon
                     } else {
                         // Stop the currently playing track first, if any
                         if (currentlyPlayingTrack) {
-                            stopTrack();
-                        }
-
-                        // Play the new track
-                        fetch(`/play/${trackFile}`)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Track not found');
-                                }
-                                currentlyPlayingTrack = trackFile;
-                                element.src = pauseIcon; // Change to pause icon
-                                return response.json();
-                            })
-                            .then(data => console.log(data))
-                            .catch(error => console.error('Error:', error));
-                    }
-                }
-
-                function stopTrack() {
-                    if (!currentlyPlayingTrack) return;
-
-                    fetch('/stop')
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
+                            audioPlayer.pause();
                             const playingElement = document.querySelector(`[data-track="${currentlyPlayingTrack}"]`);
                             if (playingElement) {
-                                playingElement.src = "{{ url_for('static', filename='img/play.png') }}"; // Change to play icon
+                                playingElement.src = playIcon; // Change to play icon
                             }
-                            currentlyPlayingTrack = null; // Reset track
-                        })
-                        .catch(error => console.error('Error:', error));
-                }
-
-                // Add event listener to stop the track when the page is refreshed or navigated away
-                window.onbeforeunload = function() {
-                    if (currentlyPlayingTrack) {
-                        stopTrack();
+                        }
+                
+                        // Set the correct audio source URL
+                        audioSource.src = `{{ url_for('static', filename='tracks') }}/${trackFile}`; // Fix path here
+                        audioPlayer.load(); // Load the new track
+                        audioPlayer.play(); // Play the track
+                        currentlyPlayingTrack = trackFile;
+                        element.src = pauseIcon; // Change to pause icon
                     }
-                };
-
-
+                }
+                
             </script>
         </div>
+        
     </section>
     <section id="Page3">
         <h1 style="font-size: 40px; color: white;padding-top: 150px;margin-left: 125px;">SIMILAR RELASES</h1>
