@@ -63,6 +63,7 @@ def create_app():
     from routes import register_routes
     register_routes(app, db, bcrypt,limiter)
 
+    '''
     @app.before_request
     def create_admin_user():
         db.create_all()  # Create database tables
@@ -75,5 +76,6 @@ def create_app():
             db.session.add(admin_user)
             db.session.commit()
             print('Admin user created!')
-
+    '''
+    
     return app
