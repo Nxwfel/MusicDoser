@@ -18,7 +18,7 @@ migrate = Migrate()
 login_manager = LoginManager() 
 bcrypt = Bcrypt() 
 csrf = CSRFProtect()
-limiter = Limiter(get_remote_address,default_limits=["200 per day", "50 per hour"])
+limiter = Limiter(get_remote_address)
 
 
 def create_app():
